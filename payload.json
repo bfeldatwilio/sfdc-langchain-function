@@ -1,3 +1,8 @@
 {
-    "Message": "Hello world"
+    "messages": [
+        {
+            "role": "user",
+            "content": "this is a test"
+        }
+    ]
 }

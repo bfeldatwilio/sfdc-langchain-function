@@ -1,13 +1,21 @@
+import { ChatOpenAI } from "langchain/chat_models/openai";
+import { HumanChatMessage, SystemChatMessage, AIChatMessage } from "langchain/schema";
+
 export default async function (event, context, logger) {
 
-  const {message} = event.data;
-  const orgInfo = {
-    id: context.org.id,
-    apiVersion: context.org.apiVersion,
-    baseUrl: context.org.baseUrl,
-    domainUrl: context.org.domainUrl,
-    message: message
-}
+  const {data} = event.data;
+	const chat = new ChatOpenAI();
+  const langMsgArray = data.messages.map((message) => {
+		if (message.role === "user") {
+			return new HumanChatMessage(message.content);
+		} else if (message.role === "system") {
+			return new SystemChatMessage(message.content);
+		} else if (message.role === "assistant") {
+			return new AIChatMessage(message.content);
+		}
 
-  return JSON.stringify(orgInfo);
+	});
+
+	const response = await chat.call(langMsgArray);
+  return response;
 }
