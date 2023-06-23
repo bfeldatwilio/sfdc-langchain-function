@@ -3,9 +3,9 @@ import { HumanChatMessage, SystemChatMessage, AIChatMessage } from "langchain/sc
 
 export default async function (event, context, logger) {
 
-  const {data} = event.data;
+  const {messages} = event.data;
 	const chat = new ChatOpenAI();
-  const langMsgArray = data.messages.map((message) => {
+  const langMsgArray = messages.map((message) => {
 		if (message.role === "user") {
 			return new HumanChatMessage(message.content);
 		} else if (message.role === "system") {
